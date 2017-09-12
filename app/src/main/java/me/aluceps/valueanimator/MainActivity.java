@@ -14,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.button.setOnClickListener(view -> binding.countUp.set(1234567890, 1000));
+        binding.button.setOnClickListener(view -> {
+            int value = 1234567890;
+            int duration = 1000;
+            binding.countUp.set(value, duration);
+        });
     }
 }
