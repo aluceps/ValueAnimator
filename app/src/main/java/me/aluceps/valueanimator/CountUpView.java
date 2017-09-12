@@ -2,6 +2,7 @@ package me.aluceps.valueanimator;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -23,6 +24,10 @@ public class CountUpView extends View {
 
     private int maximum;
 
+    private float textSize;
+
+    private int textColor;
+
     public CountUpView(Context context) {
         this(context, null);
     }
@@ -36,6 +41,15 @@ public class CountUpView extends View {
 
         current = 0;
         maximum = 0;
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CountUpView, 0, 0);
+
+        try {
+            textSize = a.getDimension(R.styleable.CountUpView_textSize, 0);
+            textColor = a.getColor(R.styleable.CountUpView_textColor, 0);
+        } finally {
+            a.recycle();
+        }
     }
 
     @Override
@@ -45,7 +59,12 @@ public class CountUpView extends View {
         Paint p = new Paint();
         p.setAntiAlias(true);
         p.setTextAlign(Paint.Align.RIGHT);
-        p.setTextSize(getResources().getDimension(R.dimen.count_up_text_size));
+        if (textSize > 0) {
+            p.setTextSize(textSize);
+        }
+        if (textColor != 0) {
+            p.setColor(textColor);
+        }
 
         String v;
         if (point != null) {
@@ -71,6 +90,7 @@ public class CountUpView extends View {
                 current = maximum;
             }
             invalidate();
+            requestLayout();
         });
         point.start();
     }
